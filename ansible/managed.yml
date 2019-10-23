@@ -1,0 +1,54 @@
+---
+- name: Deploy Kill Bill
+  hosts: all
+  tasks:
+    - name: setup Ruby
+      import_tasks: roles/common/tasks/main.yml
+
+    - name: setup Tomcat
+      import_tasks: roles/tomcat/tasks/main.yml
+
+    - name: install Kill Bill
+      import_tasks: roles/killbill/tasks/main.yml
+
+    - name: clean config files to regenerate
+      become: true
+      file:
+        state: absent
+        path: "{{ item.name }}"
+      with_items:
+        - name: "{{ kb_config_dir }}/logback.xml"
+        - name: "{{ catalina_base }}/bin/setenv2.sh"
+        - name: "{{ catalina_base }}/conf/server.xml"
+      tags: managed
+
+    - name: generate Managed Tomcat files
+      become: true
+      template:
+        src: "{{ item.src }}/{{ item.name }}.j2"
+        dest: "{{ item.dest }}/{{ item.name }}"
+        mode: "{{ item.mode }}"
+        owner: "{{ tomcat_owner }}"
+        group: "{{ tomcat_group }}"
+      with_items:
+        - src: managed/conf
+          name: server.xml
+          mode: u=rw,g=r,o=r
+          dest: "{{ catalina_base }}/conf"
+        - src: managed/conf
+          name: setenv2.sh
+          mode: u=rw,g=r,o=r
+          dest: "{{ catalina_base }}/bin"
+      tags: managed
+
+    - name: generate Managed config files
+      become: true
+      template:
+        src: "managed/{{ item.name }}.j2"
+        dest: "{{ kb_config_dir }}/{{ item.name }}"
+        mode: u=rw,g=r,o=r
+        owner: "{{ tomcat_owner }}"
+        group: "{{ tomcat_group }}"
+      with_items:
+        - name: logback.xml
+      tags: managed

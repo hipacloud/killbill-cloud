@@ -1,0 +1,32 @@
+# Java Properties
+export CATALINA_OPTS="$CATALINA_OPTS
+{% if lookup('env', 'KAUI_CONFIG_DAO_ADAPTER') %}
+                      -Dkaui.db.adapter={{ lookup('env', 'KAUI_CONFIG_DAO_ADAPTER') }}
+{% endif %}
+{% if lookup('env', 'KAUI_KILLBILL_URL') %}
+                      -Dkaui.url={{ lookup('env', 'KAUI_KILLBILL_URL') }}
+{% endif %}
+{% if lookup('env', 'KAUI_KILLBILL_API_KEY') %}
+                      -Dkaui.api_key={{ lookup('env', 'KAUI_KILLBILL_API_KEY') }}
+{% endif %}
+{% if lookup('env', 'KAUI_KILLBILL_API_SECRET') %}
+                      -Dkaui.api_secret={{ lookup('env', 'KAUI_KILLBILL_API_SECRET') }}
+{% endif %}
+{% if lookup('env', 'KAUI_CONFIG_DAO_URL') %}
+                      -Dkaui.db.url={{ lookup('env', 'KAUI_CONFIG_DAO_URL') }}
+{% endif %}
+{% if lookup('env', 'KAUI_CONFIG_DAO_PASSWORD') %}
+                      -Dkaui.db.password={{ lookup('env', 'KAUI_CONFIG_DAO_PASSWORD') }}
+{% endif %}
+{% if lookup('env', 'KAUI_CONFIG_DAO_USER') %}
+                      -Dkaui.db.username={{ lookup('env', 'KAUI_CONFIG_DAO_USER') }}
+{% endif %}
+{% if lookup('env', 'KILLBILL_QUEUE_CREATOR_NAME') %}
+                      -Dorg.killbill.queue.creator.name={{ lookup('env', 'KILLBILL_QUEUE_CREATOR_NAME') }}
+{% else %}
+                      -Dorg.killbill.queue.creator.name={{ inventory_hostname }}
+{% endif %}
+                      -Dlogback.configurationFile={{ kb_config_dir }}/logback.xml
+                      -Dorg.killbill.server.properties=file://{{ kb_config_dir }}/killbill.properties
+                      {{ kaui_system_properties }} {{ kb_system_properties }}"
+

@@ -41,3 +41,5 @@ jvm_survivor_ratio: 10
 jvm_jmx_port: 8000
 tomcat_port: 8080
 tomcat_max_threads: 100
+tomcat2_port: 3000
+tomcat2_max_threads: 30
