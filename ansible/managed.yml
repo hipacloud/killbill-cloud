@@ -2,15 +2,6 @@
 - name: Deploy Kill Bill
   hosts: all
   tasks:
-    - name: setup Ruby
-      import_tasks: roles/common/tasks/main.yml
-
-    - name: setup Tomcat
-      import_tasks: roles/tomcat/tasks/main.yml
-
-    - name: install Kill Bill
-      import_tasks: roles/killbill/tasks/main.yml
-
     - name: clean config files to regenerate
       become: true
       file:
