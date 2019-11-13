@@ -6,10 +6,10 @@ ENV KILLBILL_VERSION __VERSION__
 
 RUN echo "SET GLOBAL binlog_format = 'ROW';" > /docker-entrypoint-initdb.d/000_mysql_config.sql
 
-RUN echo 'CREATE DATABASE IF NOT EXISTS `killbill`;' > /docker-entrypoint-initdb.d/010_killbill.sql
+RUN echo 'CREATE DATABASE IF NOT EXISTS `killbill` DEFAULT CHARACTER SET utf8;' > /docker-entrypoint-initdb.d/010_killbill.sql
 RUN echo 'USE killbill;' >> /docker-entrypoint-initdb.d/010_killbill.sql
 
-RUN echo 'CREATE DATABASE IF NOT EXISTS `kaui`;' > /docker-entrypoint-initdb.d/020_kaui.sql
+RUN echo 'CREATE DATABASE IF NOT EXISTS `kaui` DEFAULT CHARACTER SET utf8;;' > /docker-entrypoint-initdb.d/020_kaui.sql
 RUN echo 'USE kaui;' >> /docker-entrypoint-initdb.d/020_kaui.sql
 
 RUN set -x \
